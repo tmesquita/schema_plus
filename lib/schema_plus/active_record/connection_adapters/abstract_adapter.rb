@@ -24,14 +24,14 @@ module SchemaPlus
             # * with mysql gem adapter is named MySQL
             # * with mysql2 gem adapter is named Mysql2
             # Here we handle this and hopefully futher adapter names
-          when /^MySQL/i 
+          when /^MySQL/i
             adapter = 'MysqlAdapter'
-          when 'PostgreSQL' 
+          when 'PostgreSQL', 'PostGIS'
             adapter = 'PostgresqlAdapter'
           when 'SQLite'
             adapter = 'Sqlite3Adapter'
           end
-          if adapter 
+          if adapter
             adapter_module = SchemaPlus::ActiveRecord::ConnectionAdapters.const_get(adapter)
             self.class.send(:include, adapter_module) unless self.class.include?(adapter_module)
             self.post_initialize if self.respond_to? :post_initialize
@@ -158,13 +158,13 @@ module SchemaPlus
             indexes(table_name).detect { |i| i.name == index_name }
           end
         end
-        
+
         #####################################################################
         #
         # The functions below here are abstract; each subclass should
         # define them all. Defining them here only for reference.
         #
-        
+
         # (abstract) Returns the names of all views, as an array of strings
         def views(name = nil) raise "Internal Error: Connection adapter didn't override abstract function"; [] end
 
